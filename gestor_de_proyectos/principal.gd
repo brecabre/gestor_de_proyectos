@@ -1,18 +1,25 @@
 extends Node
 #### "gestos de proyectos es la variable que contiene 
 #### la lista (Array) de los datos.
-#delaro gestor_de_proyectos como lista
-onready var gestor_de_proyectos =[]
 
+#delaro gestor_de_archivo como dicionatrio
+var dic_de_archivo = {}
+#delaro gestor_de_proyectos como lista
+var gestor_de_proyectos =[]
+#delaro gestor_de_tiempo como lista
+var gestor_de_tiempo =[]
+#delaro gestor_de_horasT  como lista
+var gestor_de_horasT =[]
 #delaro salida_texto y  le asignno un nodo tipo label, 
 # por donde saldrá la información por pantalla
 onready var salida_texto = get_node("Label")
+
 
 # declaro direccion y le asigno un strin con la direccion
 # contine la direccion donde se guardará 
 # el archivo físico con la base de datos
 var direccion = "res://data.json"
-
+var tiempo = OS.get_time(true)
 # delaro 
 onready var entrada_texto 
 func _ready():
@@ -23,13 +30,9 @@ func _fixed_process():
 	pass
 
 # funciones de archivo
-func salvar():
-	# asigno el valor del nodo entrada de teclado
-	entrada_texto = get_node("TextEdit").get_text()
-	# a la lista gestor_de_proyectos 
-	#le añado al finan  el valor entrada_texto
+func salvar(dic_a_salvar):
+
 	
-	gestor_de_proyectos.append(entrada_texto + "\n")
 	print("guardo archivo")
 	print(entrada_texto)
 	print(entrada_texto)
@@ -42,7 +45,12 @@ func salvar():
 	#declaro dic, diccionario que se guardará en un archivo
 	#en el dicccionario dic defino una key "gestor"
 	# asigno el valor de "gestor_de_proyectos" a la key gestor
-	var dic = {"gestor":gestor_de_proyectos }
+	
+	
+	var dic = dic_a_salvar
+	
+	
+	
 	#declaro salvar, diccionario que se guardará en un archivo
 	#en el dicccionario "salvar" defino una key ""diccionario""
 	# asigno el valor de "dic " a la key "diccionario"
@@ -93,13 +101,27 @@ func cargar(): # cagar, :) :)
 	# la key diccionario, que es un diccionario y leo la key
 	# .gestor (tipo lista)
 	gestor_de_proyectos = data.diccionario.gestor
-	
+	gestor_de_tiempo = data.diccionario.gestor_tiempo
 	#actualizo nodo salida tex con el strim de la lista gestor de ...
-	salida_texto.set_text(str(gestor_de_proyectos))
+	salida_texto.set_text(str(gestor_de_proyectos,gestor_de_tiempo))
 
 #### Funciones de botón: presiono el boton	
 func _on_salvar_boton_pressed():
-	salvar()
+	
+	# asigno el valor del nodo entrada de teclado
+	tiempo = OS.get_time(true)
+	entrada_texto = get_node("TextEdit").get_text()
+	# a la lista gestor_de_proyectos 
+	#le añado al finan  de la lista el valor entrada_texto
+	gestor_de_proyectos.append(entrada_texto+"\n")
+	# a la lista gestor_de_proyectos 
+	#le añado al finan  de la lista el valor entrada_texto# 
+	gestor_de_tiempo.append(str(tiempo)+"\n")
+	
+	# asigno al diccionari ARC los valores de las listas 
+	dic_de_archivo  = {"gestor":gestor_de_proyectos, "gestor_tiempo": gestor_de_tiempo}
+	
+	salvar(dic_de_archivo)
 	cargar()
 #	entrada_texto = "empty"
 	limpiar_texto_inter()
